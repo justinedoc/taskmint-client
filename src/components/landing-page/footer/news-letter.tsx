@@ -23,7 +23,7 @@ function SubscribeNewsLetter() {
           />
           <Button
             size="lg"
-            className="absolute top-1/2 right-[1px] -translate-y-1/2"
+            className="absolute top-1/2 right-0.5 -translate-y-1/2"
           >
             Subscribe
           </Button>

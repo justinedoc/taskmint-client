@@ -1,13 +1,12 @@
 import SecondarySidebarContent from "@/components/dashboard/sidebar/secondary-sidebar-content";
 import SidebarTasks from "@/components/dashboard/sidebar/sidebar-tasks";
-import { Sheet } from "@/components/ui/sheet";
 
 function SecondarySidebar() {
   return (
-    <Sheet>
+    <div className="bg-sidebar h-full min-h-full">
       <SecondarySidebarContent />
       <SidebarTasks />
-    </Sheet>
+    </div>
   );
 }
 

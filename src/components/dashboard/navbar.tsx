@@ -33,7 +33,7 @@ function Navbar() {
   }
 
   return (
-    <nav className="bg-background sticky top-0 z-[50] flex h-16 w-full shrink-0 items-center gap-6 border-b px-4">
+    <nav className="bg-sidebar sticky top-0 z-50 flex h-16 w-full shrink-0 items-center gap-6 border-b px-4">
       <div className="flex items-center gap-2">
         <SidebarTrigger className="-ml-1 rotate-180 md:rotate-[initial]" />
 

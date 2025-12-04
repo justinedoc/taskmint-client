@@ -18,7 +18,7 @@ export default function DashboardSidebar({
   const { state } = useSidebar();
 
   return (
-    <Sidebar {...props}>
+    <Sidebar {...props} collapsible="icon">
       <SidebarHeader className="group-data-[collapsible=icon]">
         <Link
           to="/"

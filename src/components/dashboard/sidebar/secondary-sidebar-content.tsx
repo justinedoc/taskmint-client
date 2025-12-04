@@ -29,6 +29,7 @@ function SecondarySidebarContent() {
             value={tab.value}
             className="dark:data-[state=active]:text-primary p-2 before:hidden"
           >
+            {/** biome-ignore lint/a11y/noLabelWithoutControl: <...> */}
             {<tab.label />}
           </TabsTrigger>
         ))}

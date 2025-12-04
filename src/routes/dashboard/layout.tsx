@@ -7,6 +7,7 @@ import {
 import Navbar from "@/components/dashboard/navbar";
 import DashboardSidebar from "@/components/dashboard/sidebar";
 import SecondarySidebar from "@/components/dashboard/sidebar/secondary-sidebar";
+import Loading from "@/components/ui/loading";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/dashboard")({
     }
   },
   component: Dashboard,
-  pendingComponent: () => <div>Loading...</div>,
+  pendingComponent: () => <Loading />,
   notFoundComponent: () => <div>Layout - not found</div>,
 });
 
@@ -42,25 +43,33 @@ function Dashboard() {
   return (
     <SidebarProvider defaultOpen={false}>
       <DashboardSidebar />
-      <SidebarInset>
+
+      <SidebarInset className="flex flex-col h-svh overflow-hidden">
         <Navbar />
 
         <ResizablePanelGroup
           direction="horizontal"
-          className="hidden! flex-1 md:flex!"
+          className="hidden! flex-1 h-full md:flex!"
         >
-          <ResizablePanel className="flex-1 p-8">
-            <Outlet />
+          {/* MAIN CONTENT PANEL */}
+          <ResizablePanel defaultSize={68} minSize={30}>
+            <div className="h-full w-full overflow-y-auto p-8">
+              <Outlet />
+            </div>
           </ResizablePanel>
 
           <ResizableHandle withHandle />
 
+          {/* SECONDARY SIDEBAR PANEL */}
           <ResizablePanel defaultSize={32} minSize={32} maxSize={38}>
-            <SecondarySidebar />
+            <div className="h-full w-full overflow-y-auto border-l">
+              <SecondarySidebar />
+            </div>
           </ResizablePanel>
         </ResizablePanelGroup>
 
-        <div className="flex w-full p-4 md:hidden">
+        {/* Mobile View */}
+        <div className="flex w-full flex-1 overflow-y-auto p-4 md:hidden">
           <Outlet />
         </div>
       </SidebarInset>
