@@ -111,7 +111,10 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
               aria-hidden={!showStrength}
             >
               {strength.map((req, i) => (
-                <li key={i} className="flex items-center gap-2">
+                <li
+                  key={`requirement-${i + 1}`}
+                  className="flex items-center gap-2"
+                >
                   {req.met ? (
                     <CheckIcon
                       size={16}

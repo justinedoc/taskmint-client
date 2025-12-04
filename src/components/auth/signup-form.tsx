@@ -107,7 +107,7 @@ export default function SignupForm({
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <PasswordInput {...field} />
+                <PasswordInput {...field} value={field.value || ""} />
               </FormControl>
               <FormMessage />
             </FormItem>
