@@ -1,9 +1,12 @@
-import { useMutation } from "@tanstack/react-query";
+import {
+  type QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { toast } from "sonner";
 import { API } from "@/api/axios";
 import { parseAxiosError } from "@/lib/parse-axios-error";
 import { analyticsKeys, taskKeys } from "@/lib/query-keys";
-import { queryClient } from "@/main";
 
 // Types matching backend Zod Schema
 type CreateTaskPayload = {
@@ -19,20 +22,22 @@ type CreateTaskPayload = {
 type UpdateTaskPayload = Partial<CreateTaskPayload> & { _id: string };
 
 // Helper to invalidate everything related to tasks and analytics
-const invalidateAllTaskData = () => {
+const invalidateAllTaskData = (queryClient: QueryClient) => {
   queryClient.invalidateQueries({ queryKey: taskKeys.all });
-  queryClient.invalidateQueries({ queryKey: analyticsKeys.all });
+  queryClient.invalidateQueries({ queryKey: analyticsKeys.weeklyProductivity });
+  queryClient.invalidateQueries({ queryKey: analyticsKeys.goalSummary });
 };
 
 // --- DELETE ---
 export function useDeleteTaskMutation() {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (taskId: string) => {
       await API.delete(`/tasks/${taskId}`);
     },
     onSuccess: () => {
       toast.success("Task deleted");
-      invalidateAllTaskData();
+      invalidateAllTaskData(queryClient);
     },
     onError: (error) => {
       const { message } = parseAxiosError(error);
@@ -43,6 +48,8 @@ export function useDeleteTaskMutation() {
 
 // --- CREATE ---
 export function useCreateTaskMutation() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (data: CreateTaskPayload) => {
       const res = await API.post("/tasks", data);
@@ -50,7 +57,7 @@ export function useCreateTaskMutation() {
     },
     onSuccess: () => {
       toast.success("Task created");
-      invalidateAllTaskData();
+      invalidateAllTaskData(queryClient);
     },
     onError: (error) => {
       const { message } = parseAxiosError(error);
@@ -61,6 +68,8 @@ export function useCreateTaskMutation() {
 
 // --- UPDATE ---
 export function useUpdateTaskMutation() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async ({ _id, ...data }: UpdateTaskPayload) => {
       const res = await API.patch(`/tasks/${_id}`, data);
@@ -68,7 +77,7 @@ export function useUpdateTaskMutation() {
     },
     onSuccess: () => {
       toast.success("Task updated");
-      invalidateAllTaskData();
+      invalidateAllTaskData(queryClient);
     },
     onError: (error) => {
       const { message } = parseAxiosError(error);
@@ -79,6 +88,8 @@ export function useUpdateTaskMutation() {
 
 // --- TOGGLE COMPLETE (Specialized Mutation for UI snappiness) ---
 export function useToggleTaskCompleteMutation() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async ({
       _id,
@@ -96,7 +107,7 @@ export function useToggleTaskCompleteMutation() {
     onSuccess: (_, variables) => {
       const msg = variables.completed ? "Task completed!" : "Task re-opened";
       toast.success(msg);
-      invalidateAllTaskData();
+      invalidateAllTaskData(queryClient);
     },
     onError: (error) => {
       const { message } = parseAxiosError(error);

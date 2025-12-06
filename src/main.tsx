@@ -1,9 +1,6 @@
-import { QueryCache, QueryClient } from "@tanstack/react-query";
 import { createRouteMask, createRouter } from "@tanstack/react-router";
-import { AxiosError } from "axios";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { useAuthStore } from "@/store/auth-store";
 import * as TanStackQueryProvider from "./integrations/tanstack-query/root-provider.tsx";
 
 // Import the generated route tree
@@ -13,18 +10,9 @@ import "./styles.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import App from "@/app.tsx";
 import AuthProvider from "@/components/providers/auth-provider.tsx";
-// import reportWebVitals from "./reportWebVitals.ts";
+import { queryClient } from "@/lib/react-query.ts";
 
-export const queryClient = new QueryClient({
-  queryCache: new QueryCache({
-    onError: (error) => {
-      if (error instanceof AxiosError && error.response?.status === 401) {
-        console.error("Unrecoverable auth error detected. Logging out.");
-        useAuthStore.getState().clearAuth();
-      }
-    },
-  }),
-});
+// import reportWebVitals from "./reportWebVitals.ts";
 
 const signinModalToSigninMask = createRouteMask({
   routeTree,
@@ -42,12 +30,10 @@ const signupModalToSignupMask = createRouteMask({
 
 // Create a new router instance
 
-const TanStackQueryProviderContext = TanStackQueryProvider.getContext();
 export const router = createRouter({
   routeTree,
   routeMasks: [signinModalToSigninMask, signupModalToSignupMask],
   context: {
-    ...TanStackQueryProviderContext,
     // biome-ignore lint/style/noNonNullAssertion: <...>
     auth: undefined!,
   },
@@ -73,7 +59,7 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <GoogleOAuthProvider clientId={googleClientId}>
-        <TanStackQueryProvider.Provider {...TanStackQueryProviderContext}>
+        <TanStackQueryProvider.Provider queryClient={queryClient}>
           <AuthProvider>
             <App />
           </AuthProvider>

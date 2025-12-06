@@ -1,6 +1,7 @@
 export const taskKeys = {
   all: ["tasks"] as const,
-  lists: () => [...taskKeys.all, "list"] as const,
+  lists: () => [...taskKeys.all] as const,
+  // biome-ignore lint/suspicious/noExplicitAny: <...>
   list: (filters: Record<string, any>) =>
     [...taskKeys.lists(), filters] as const,
   details: () => [...taskKeys.all, "detail"] as const,

@@ -28,7 +28,7 @@ createAuthRefreshInterceptor(
   async (failedRequest) => {
     try {
       const { data } = await API.post<{ accessToken: string }>(
-        "/refresh",
+        "/auth/refresh",
         {},
         { skipAuthRefresh: true },
       );
@@ -38,7 +38,7 @@ createAuthRefreshInterceptor(
       useAuthStore.getState().setAuth(newAccessToken);
 
       if (failedRequest.response) {
-        failedRequest.response.config.headers["Authorization"] =
+        failedRequest.response.config.headers.Authorization =
           `Bearer ${newAccessToken}`;
       }
 
