@@ -27,7 +27,7 @@ function Features() {
 }
 function FeaturesCard({ features }: { features: FeaturesTypes }) {
   return (
-    <Card className="flex w-full max-w-sm md:last:col-span-3 md:last:mx-auto">
+    <Card className="card_gradient flex w-full max-w-sm md:last:col-span-3 md:last:mx-auto">
       <CardHeader className="grid place-items-center">
         <div className="bg-foreground flex size-12 items-center justify-center rounded-full">
           {<features.icon className="text-background" />}
