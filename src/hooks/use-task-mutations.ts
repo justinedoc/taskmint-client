@@ -24,7 +24,7 @@ type UpdateTaskPayload = Partial<CreateTaskPayload> & { _id: string };
 // Helper to invalidate everything related to tasks and analytics
 const invalidateAllTaskData = (queryClient: QueryClient) => {
   queryClient.invalidateQueries({ queryKey: taskKeys.all });
-  queryClient.invalidateQueries({ queryKey: analyticsKeys.weeklyProductivity });
+  // queryClient.invalidateQueries({ queryKey: analyticsKeys.weeklyProductivity });
   queryClient.invalidateQueries({ queryKey: analyticsKeys.goalSummary });
 };
 

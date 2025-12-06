@@ -1,49 +1,31 @@
-import { cva, type VariantProps } from "class-variance-authority";
-import type { ClassValue } from "clsx";
 import type * as React from "react";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-const TASK_PRIORITY = ["low", "medium", "high"] as const;
-
-const priorityStyles: Record<(typeof TASK_PRIORITY)[number], ClassValue> = {
-  high: "bg-red-500/20 text-white hover:bg-red-500",
-  medium: "bg-yellow-500/20 text-white hover:bg-yellow-500",
-  low: "bg-gray-500/20 text-white hover:bg-gray-500",
-};
-
-const statusButtonVariants = cva(
-  "bg-primary text-foreground hover:bg-primary/90 inline-flex w-fit shrink-0 items-center justify-center rounded-full font-mono text-xs font-medium whitespace-nowrap shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50",
-  {
-    variants: {
-      priority: priorityStyles,
-      size: {
-        default: "h-6 px-3.5",
-        sm: "h-5 px-3",
-      },
-    },
-    defaultVariants: {
-      priority: "low",
-      size: "default",
-    },
-  },
-);
+import type { Task } from "@/types/task";
 
 function StatusButton({
   className,
   priority,
-  size,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof statusButtonVariants> & {
-    asChild?: boolean;
-  }) {
+}: React.ComponentProps<typeof Badge> & {
+  priority: Task["priority"];
+}) {
   return (
-    <button
-      data-slot="button"
-      className={cn(statusButtonVariants({ priority, size, className }))}
+    <Badge
+      variant="outline"
       {...props}
-    />
+      className={cn(
+        priority === "high"
+          ? "border-red-200 bg-red-50 text-red-700 dark:border-red-900 dark:bg-red-900/20 dark:text-red-400"
+          : priority === "medium"
+            ? "border-yellow-200 bg-yellow-50 text-yellow-700 dark:border-yellow-900 dark:bg-yellow-900/20 dark:text-yellow-400"
+            : "",
+        className,
+      )}
+    >
+      {priority}
+    </Badge>
   );
 }
 
-export { StatusButton, statusButtonVariants, TASK_PRIORITY };
+export { StatusButton };

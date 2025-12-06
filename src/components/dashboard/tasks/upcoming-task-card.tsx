@@ -7,7 +7,6 @@ import { useToggleTaskCompleteMutation } from "@/hooks/use-task-mutations";
 import { cn } from "@/lib/utils";
 import type { Task } from "@/types/task";
 
-// Helper for "Overdue" logic
 const getTaskTimeStatus = (dateString: string) => {
   const now = new Date();
   const date = new Date(dateString);
@@ -21,7 +20,7 @@ function UpcomingTaskCard({ task }: { task: Task }) {
   return (
     <Card
       className={cn(
-        "flex flex-col gap-0 border-l-4 shadow-sm transition-all hover:shadow-md",
+        "flex flex-col gap-0 border-l-4 py-2! shadow-sm transition-all hover:shadow-md",
         task.completed ? "border-l-green-500 opacity-60" : "border-l-primary",
       )}
     >
@@ -48,10 +47,8 @@ function UpcomingTaskCard({ task }: { task: Task }) {
             </p>
           </div>
         </div>
-        <StatusButton
-          priority={task.priority}
-          className="h-6 px-2 text-[10px]"
-        />
+
+        <StatusButton priority={task.priority}>{task.priority}</StatusButton>
       </CardHeader>
 
       <CardFooter className="bg-muted/30 text-muted-foreground mt-auto flex items-center justify-between border-t px-4 py-2 text-xs">

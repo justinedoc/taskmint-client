@@ -55,7 +55,7 @@ export function TasksGridView({ tasks, onEdit }: TasksGridViewProps) {
             >
               {task.title}
             </h3>
-            <p className="text-muted-foreground mt-2 line-clamp-2 min-h-[40px] text-sm">
+            <p className="text-muted-foreground mt-2 line-clamp-2 min-h-10 text-sm">
               {task.description || "No description provided."}
             </p>
           </CardContent>

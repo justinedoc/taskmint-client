@@ -11,7 +11,10 @@ export const queryClient = new QueryClient({
   },
   queryCache: new QueryCache({
     onError: (error) => {
-      if (error instanceof AxiosError && (error.response?.status === 401 || error.response?.status === 500)) {
+      if (
+        error instanceof AxiosError &&
+        (error.response?.status === 401 || error.response?.status === 500)
+      ) {
         console.error("Auth error detected. Logging out.");
         useAuthStore.getState().clearAuth();
       }

@@ -11,7 +11,7 @@ function AuthProvider({ children }: PropsWithChildren) {
   if (accessToken && (isFetching || isError || !isSuccess)) {
     return <Loading />;
   }
-  
+
   return <>{children}</>;
 }
 

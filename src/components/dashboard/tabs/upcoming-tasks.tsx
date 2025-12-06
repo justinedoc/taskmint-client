@@ -16,12 +16,14 @@ import { useTasks } from "@/hooks/use-tasks";
 import { cn } from "@/lib/utils";
 
 function UpcomingTasksTab() {
+  const currentDate = new Date();
+
   return (
     <section className="space-y-6 py-4">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-semibold">Today's Focus</h1>
-        <p className="text-muted-foreground text-sm">
-          {new Date().toLocaleDateString(undefined, {
+        <p className="text-muted-foreground text-sm font-medium">
+          {currentDate.toLocaleDateString(undefined, {
             weekday: "long",
             month: "long",
             day: "numeric",
@@ -34,10 +36,16 @@ function UpcomingTasksTab() {
 }
 
 function UpcomingTasks() {
-  const today = useMemo(() => new Date(), []);
+  const todayDateString = useMemo(() => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }, []);
 
   const { data, isPending, isError } = useTasks({
-    date: today,
+    date: todayDateString,
     sortBy: "startTime",
     sortOrder: "asc",
   });
@@ -46,7 +54,7 @@ function UpcomingTasks() {
     return (
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {Array.from({ length: 4 }).map((_, i) => (
-          <TaskCardSkeleton key={i} />
+          <TaskCardSkeleton key={`index-${i + 1}`} />
         ))}
       </div>
     );
@@ -54,7 +62,7 @@ function UpcomingTasks() {
 
   if (isError) {
     return (
-      <div className="bg-destructive/5 border-destructive/20 flex min-h-[300px] flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
+      <div className="bg-destructive/5 border-destructive/20 flex min-h-[200px] flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center">
         <AlertTriangle className="text-destructive mb-4 h-10 w-10" />
         <h2 className="text-destructive text-lg font-semibold">
           Could not load tasks
@@ -66,12 +74,12 @@ function UpcomingTasks() {
     );
   }
 
-  if (!data || data.data.tasks.length === 0) {
+  if (!data?.data?.tasks || data.data.tasks.length === 0) {
     return (
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="icon">
-            <Inbox />
+            <Inbox className="text-muted-foreground" />
           </EmptyMedia>
           <EmptyTitle>No tasks for today</EmptyTitle>
           <EmptyDescription>
