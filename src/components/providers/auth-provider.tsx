@@ -1,24 +1,17 @@
-import { type PropsWithChildren, useEffect } from "react";
+import type { PropsWithChildren } from "react";
 import Loading from "@/components/ui/loading";
 import { useUser } from "@/hooks/use-user";
-import { router } from "@/main";
 import { useAuthStore } from "@/store/auth-store";
 
 function AuthProvider({ children }: PropsWithChildren) {
-  const { isLoading, isError } = useUser();
+  const accessToken = useAuthStore((s) => s.accessToken);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: handled by router
-  useEffect(() => {
-    if (isError) {
-      useAuthStore.setState({ isAuthed: false });
-      router.navigate({ to: "/" });
-    }
-  }, [isError, router]);
+  const { isFetching, isError, isSuccess } = useUser();
 
-  if (isLoading || isError) {
+  if (accessToken && (isFetching || isError || !isSuccess)) {
     return <Loading />;
   }
-
+  
   return <>{children}</>;
 }
 

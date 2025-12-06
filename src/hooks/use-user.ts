@@ -16,14 +16,14 @@ import { parseAxiosError } from "@/lib/parse-axios-error";
 import { useAuthStore } from "@/store/auth-store";
 
 export const userQueryOptions = () => {
-  const isAuthed = useAuthStore.getState().isAuthed;
+  const accessToken = useAuthStore.getState().accessToken;
 
   return queryOptions({
     queryKey: ["user"],
     queryFn: getCurrentUser,
     staleTime: Infinity,
     retry: false,
-    enabled: isAuthed,
+    enabled: !!accessToken,
   });
 };
 

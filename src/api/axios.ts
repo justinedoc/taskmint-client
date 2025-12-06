@@ -34,17 +34,17 @@ createAuthRefreshInterceptor(
       );
 
       const newAccessToken = data.accessToken;
-
       useAuthStore.getState().setAuth(newAccessToken);
 
       if (failedRequest.response) {
-        failedRequest.response.config.headers.Authorization =
-          `Bearer ${newAccessToken}`;
+        failedRequest.response.config.headers.Authorization = `Bearer ${newAccessToken}`;
       }
 
       return Promise.resolve();
     } catch (error) {
       console.error("Client Refresh token error:", parseAxiosError(error));
+
+      useAuthStore.getState().clearAuth();
 
       return Promise.reject(error);
     }

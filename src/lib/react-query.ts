@@ -1,4 +1,4 @@
-import { QueryClient, QueryCache } from "@tanstack/react-query";
+import { QueryCache, QueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useAuthStore } from "@/store/auth-store";
 
@@ -11,7 +11,7 @@ export const queryClient = new QueryClient({
   },
   queryCache: new QueryCache({
     onError: (error) => {
-      if (error instanceof AxiosError && error.response?.status === 401) {
+      if (error instanceof AxiosError && (error.response?.status === 401 || error.response?.status === 500)) {
         console.error("Auth error detected. Logging out.");
         useAuthStore.getState().clearAuth();
       }
