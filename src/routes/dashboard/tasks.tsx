@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/noNonNullAssertion: <...> */
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { LayoutGrid, List, Plus, Search, X } from "lucide-react";
@@ -96,7 +97,7 @@ function TasksPage() {
   };
 
   return (
-    <div className="flex h-full flex-col space-y-6">
+    <div className="flex h-full flex-col space-y-6 flex-1">
       {/* Header */}
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <div>
@@ -122,6 +123,7 @@ function TasksPage() {
           />
           {searchTerm && (
             <button
+              type="button"
               onClick={() => setSearchTerm("")}
               className="text-muted-foreground hover:text-foreground absolute top-3 right-3"
             >
@@ -143,7 +145,7 @@ function TasksPage() {
               })
             }
           >
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="md:w-[140px]">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -166,7 +168,7 @@ function TasksPage() {
               })
             }
           >
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="md:w-[140px]">
               <SelectValue placeholder="Priority" />
             </SelectTrigger>
             <SelectContent>

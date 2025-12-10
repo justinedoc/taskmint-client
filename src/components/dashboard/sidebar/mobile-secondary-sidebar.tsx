@@ -11,7 +11,7 @@ function MobileSecondarySidebar() {
           <EllipsisVertical />
         </Button>
       </SheetTrigger>
-      <SheetContent className="py-4">
+      <SheetContent className="py-8">
         <SecondarySidebarContent />
       </SheetContent>
     </Sheet>
