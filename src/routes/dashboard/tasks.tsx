@@ -106,14 +106,24 @@ function TasksPage() {
             Manage your daily tasks and track progress.
           </p>
         </div>
-        <Button onClick={handleCreate}>
-          <Plus className="size-4" /> Create Task
-        </Button>
+
+        {/* Actions Row: Contains Mobile View Toggle & Create Button */}
+        <div className="flex items-center gap-2">
+          <Button onClick={handleCreate} className="flex-1 md:flex-none">
+            <Plus className="size-4" /> Create Task
+          </Button>
+
+          {/* Mobile Only: View Toggle */}
+          <div className="md:hidden">
+            <ViewTabs />
+          </div>
+        </div>
       </div>
 
       {/* Toolbar */}
       <div className="bg-card flex flex-col gap-4 rounded-lg border p-4 shadow-sm md:flex-row md:items-center">
-        <div className="relative flex-1">
+        {/* Search Input: Full width on mobile, Flex-1 on desktop */}
+        <div className="relative w-full md:flex-1">
           <Search className="text-muted-foreground absolute top-1/2 left-2.5 h-4 w-4 -translate-y-1/2" />
           <Input
             placeholder="Search tasks..."
@@ -132,7 +142,7 @@ function TasksPage() {
           )}
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
+        <div className="grid grid-cols-[1fr_1fr_auto] gap-2 w-full md:flex md:w-auto">
           <Select
             value={searchParams.status}
             onValueChange={(val) =>
@@ -145,7 +155,7 @@ function TasksPage() {
               })
             }
           >
-            <SelectTrigger className="md:w-[140px]">
+            <SelectTrigger className="w-full md:w-[140px]">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -168,7 +178,7 @@ function TasksPage() {
               })
             }
           >
-            <SelectTrigger className="md:w-[140px]">
+            <SelectTrigger className="w-full md:w-[140px]">
               <SelectValue placeholder="Priority" />
             </SelectTrigger>
             <SelectContent>
@@ -179,30 +189,9 @@ function TasksPage() {
             </SelectContent>
           </Select>
 
-          <div className="bg-background flex items-center rounded-md border px-1">
-            <Tabs
-              value={searchParams.view}
-              onValueChange={(val) =>
-                navigate({
-                  search: (prev) => ({ ...prev, view: val as "list" | "grid" }),
-                })
-              }
-            >
-              <TabsList className="h-8 bg-transparent p-0">
-                <TabsTrigger
-                  value="list"
-                  className="data-[state=active]:bg-muted h-7 px-2"
-                >
-                  <List className="h-4 w-4" />
-                </TabsTrigger>
-                <TabsTrigger
-                  value="grid"
-                  className="data-[state=active]:bg-muted h-7 px-2"
-                >
-                  <LayoutGrid className="h-4 w-4" />
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
+          {/* Desktop Only: View Toggle */}
+          <div className="hidden md:block">
+            <ViewTabs />
           </div>
         </div>
       </div>
@@ -274,6 +263,39 @@ function TasksPage() {
         onOpenChange={setIsDialogOpen}
         taskToEdit={taskToEdit}
       />
+    </div>
+  );
+}
+
+function ViewTabs() {
+  const navigate = useNavigate({ from: Route.fullPath });
+  const searchParams = Route.useSearch();
+
+  return (
+    <div className="bg-background flex items-center rounded-md border px-1">
+      <Tabs
+        value={searchParams.view}
+        onValueChange={(val) =>
+          navigate({
+            search: (prev) => ({ ...prev, view: val as "list" | "grid" }),
+          })
+        }
+      >
+        <TabsList className="h-8 bg-transparent p-0">
+          <TabsTrigger
+            value="list"
+            className="data-[state=active]:bg-muted h-7 px-2"
+          >
+            <List className="h-4 w-4" />
+          </TabsTrigger>
+          <TabsTrigger
+            value="grid"
+            className="data-[state=active]:bg-muted h-7 px-2"
+          >
+            <LayoutGrid className="h-4 w-4" />
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
     </div>
   );
 }

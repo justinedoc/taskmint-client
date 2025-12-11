@@ -1,6 +1,6 @@
 import { createRouteMask, createRouter } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
 import { queryClient } from "@/lib/react-query";
+import { routeTree } from "./routeTree.gen";
 
 const signinModalToSigninMask = createRouteMask({
   routeTree,
