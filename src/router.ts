@@ -1,5 +1,6 @@
 import { createRouteMask, createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
+import { queryClient } from "@/lib/react-query";
 
 const signinModalToSigninMask = createRouteMask({
   routeTree,
@@ -19,6 +20,7 @@ export const router = createRouter({
   routeTree,
   routeMasks: [signinModalToSigninMask, signupModalToSignupMask],
   context: {
+    queryClient,
     // biome-ignore lint/style/noNonNullAssertion: <...>
     auth: undefined!,
   },

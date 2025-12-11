@@ -15,11 +15,11 @@ import { getCurrentUser } from "@/data/get-current-user";
 import { parseAxiosError } from "@/lib/parse-axios-error";
 import { useAuthStore } from "@/store/auth-store";
 
-export const userQueryOptions = () => {
-  const accessToken = useAuthStore.getState().accessToken;
+export const USER_QUERY_KEY = ["user"];
 
+export const userQueryOptions = (accessToken: string | null) => {
   return queryOptions({
-    queryKey: ["user"],
+    queryKey: USER_QUERY_KEY,
     queryFn: getCurrentUser,
     staleTime: Infinity,
     retry: false,
@@ -27,7 +27,10 @@ export const userQueryOptions = () => {
   });
 };
 
-export const useUser = () => useQuery(userQueryOptions());
+export const useUser = () => {
+  const accessToken = useAuthStore((s) => s.accessToken);
+  return useQuery(userQueryOptions(accessToken));
+};
 
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
@@ -37,7 +40,7 @@ export const useUpdateUser = () => {
       updateUser(userId, data),
     onSuccess: () => {
       toast.success("Profile updated successfully!");
-      queryClient.invalidateQueries({ queryKey: userQueryOptions().queryKey });
+      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
     },
     onError: (error) => {
       const { message } = parseAxiosError(error);
@@ -46,13 +49,14 @@ export const useUpdateUser = () => {
   });
 };
 
+
 export const useToggle2FA = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: toggleTwoFactorAuth,
     onSuccess(data) {
-      queryClient.invalidateQueries({ queryKey: userQueryOptions().queryKey });
+      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
       toast.success(data.message);
     },
     onError: (error) => {
@@ -69,7 +73,7 @@ export const useUpdateProfilePicture = () => {
     mutationFn: (formData: FormData) => updateProfilePicture(formData),
     onSuccess: () => {
       toast.success("Profile picture updated!");
-      queryClient.invalidateQueries({ queryKey: userQueryOptions().queryKey });
+      queryClient.invalidateQueries({ queryKey: USER_QUERY_KEY });
     },
     onError: (error) => {
       const { message } = parseAxiosError(error);

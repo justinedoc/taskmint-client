@@ -6,7 +6,7 @@ import { useAuthStore } from "@/store/auth-store";
 
 function AuthProvider({ children }: PropsWithChildren) {
   const accessToken = useAuthStore((s) => s.accessToken);
-  const { isFetching, isError, isSuccess } = useUser();
+  const { isPending, isError } = useUser();
 
   useEffect(() => {
     if (accessToken && isError) {
@@ -16,8 +16,12 @@ function AuthProvider({ children }: PropsWithChildren) {
     }
   }, [accessToken, isError]);
 
-  if (accessToken && (isFetching || isError || !isSuccess)) {
+  if (accessToken && isPending) {
     return <Loading />;
+  }
+
+  if (accessToken && isError) {
+    return null;
   }
 
   return <>{children}</>;
